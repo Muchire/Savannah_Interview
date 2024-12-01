@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -25,18 +24,26 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Set up PostgreSQL
+      uses: Harmon758/postgresql-action@v1.2.0
+      with:
+        postgresql version: '13'
+        postgresql_db: ${{ secrets.DATABASE_NAME }}
+        postgresql_user: ${{ secrets.DATABASE_USER }}
+        postgresql_password: ${{ secrets.DATABASE_PASSWORD }}
+        postgresql_port: ${{ secrets.DATABASE_PORT }}
     - name: Run Tests
       env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}  
-        CLIENT_ID: ${{ secrets.CLIENT_ID }}  
-        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }} 
-        ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}  
-        AFRICASTALKING_API_KEY: ${{ secrets.AFRICASTALKING_API_KEY}}  
-        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME}} 
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME}}  
-        DATABASE_USER : ${{ secrets.DATABASE_USER}}  
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD}}  
-        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}  
-        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}  
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+        AFRICASTALKING_API_KEY: ${{ secrets.AFRICASTALKING_API_KEY}}
+        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME}}
+        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+        DATABASE_USER: ${{ secrets.DATABASE_USER }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        DATABASE_HOST:  ${{ secrets.DATABASE_HOST }} # Use localhost for GitHub Actions environment
+        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
       run: |
         python manage.py test
