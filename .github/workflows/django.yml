@@ -26,5 +26,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Tests
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}  
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}  
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }} 
+        ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}  
+        AFRICASTALKING_API_KEY: ${{ secrets.AFRICASTALKING_API_KEY}}  
+        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME}}  
       run: |
         python manage.py test
