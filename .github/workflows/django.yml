@@ -18,11 +18,6 @@ jobs:
           POSTGRES_DB: ${{ secrets.DATABASE_NAME }}
           POSTGRES_USER: ${{ secrets.DATABASE_USER }}
           POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        options: > 
-          --health-cmd="pg_isready -U ${{ secrets.DATABASE_USER }}" 
-          --health-interval=10s 
-          --health-timeout=5s 
-          --health-retries=5
 
     strategy:
       matrix:
@@ -40,23 +35,23 @@ jobs:
         pip install -r requirements.txt
     - name: Wait for PostgreSQL
       run: |
-        while ! pg_isready -h localhost -p 5432 -U ${{ secrets.DATABASE_USER }}; do
-          sleep 1
+        until pg_isready -h localhost -p 5432 -U ${{ secrets.DATABASE_USER }}; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 5
         done
-
     - name: Run Tests
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-        AFRICASTALKING_API_KEY: ${{ secrets.AFRICASTALKING_API_KEY}}
-        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME}}
+        AFRICASTALKING_API_KEY: ${{ secrets.AFRICASTALKING_API_KEY }}
+        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME }}
         DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
         DATABASE_USER: ${{ secrets.DATABASE_USER }}
         DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_HOST: localhost
-        DATABASE_PORT: 5432
+        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
       run: |
         python manage.py migrate
         python manage.py test
