@@ -25,7 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Set up PostgreSQL
-      uses: Harmon758/postgresql-action@v1.2.0
+      uses: Harmon758/postgresql-action@v1.0.0
       with:
         postgresql version: '13'
         postgresql_db: ${{ secrets.DATABASE_NAME }}
