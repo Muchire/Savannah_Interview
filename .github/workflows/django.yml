@@ -52,6 +52,7 @@ jobs:
         DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
         DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: |
         python manage.py migrate
         python manage.py test
