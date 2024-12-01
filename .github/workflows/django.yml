@@ -8,22 +8,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_DB: ${{ secrets.DATABASE_NAME }}
-          POSTGRES_USER: ${{ secrets.DATABASE_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U ${{ secrets.DATABASE_USER }} -d ${{ secrets.DATABASE_NAME }}"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
+    runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
@@ -31,41 +17,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-        
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        
-    - name: Run Migrations
-      env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-        DATABASE_USER: ${{ secrets.DATABASE_USER }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-      run: |
-        python manage.py makemigrations
-        python manage.py migrate
-        
     - name: Run Tests
       env:
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-        AFRICASTALKING_API_KEY: ${{ secrets.AFRICASTALKING_API_KEY }}
-        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME }}
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-        DATABASE_USER: ${{ secrets.DATABASE_USER }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}  
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}  
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }} 
+        ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}  
+        AFRICASTALKING_API_KEY: ${{ secrets.AFRICASTALKING_API_KEY}}  
+        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME}} 
+        DATABASE_NAME: ${{ secrets.DATABASE_NAME}}  
+        DATABASE_USER : ${{ secrets.DATABASE_USER}}  
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD}}  
+        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}  
+        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}  
       run: |
         python manage.py test
