@@ -32,6 +32,11 @@ jobs:
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }} 
         ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}  
         AFRICASTALKING_API_KEY: ${{ secrets.AFRICASTALKING_API_KEY}}  
-        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME}}  
+        AFRICASTALKING_USERNAME: ${{ secrets.AFRICASTALKING_USERNAME}} 
+        DATABASE_NAME: ${{ secrets.DATABASE_NAME}}  
+        DATABASE_USER : ${{ secrets.DATABASE_USER}}  
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD}}  
+        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}  
+        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}  
       run: |
         python manage.py test
